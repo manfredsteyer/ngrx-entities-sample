@@ -1,61 +1,25 @@
-import { FlightState, FlightStatistics } from './flight.state';
 import {
-  FLIGHT_CHANGED_ACTION, FLIGHTS_LOADED_ACTION, FlightChangedAction,
-  FlightsLoadedAction, FLIGHTS_LOAD_ERROR_ACTION
+  FLIGHT_CHANGED_ACTION,
+  FlightActions, FLIGHTS_LOADED_ACTION
 } from './flight.actions';
-import { Action } from '@ngrx/store';
 import { Flight } from '../../entities/flight';
+import { createEntityAdapter } from '@ngrx/entity';
+import { FlightState } from "./flight.state";
+import { createSelector } from '@ngrx/store';
 
+export const flightAdapter = createEntityAdapter<Flight>();
 
-export function FlightReducer(state: FlightState, action: Action): FlightState {
+export const defaultFlightSelectors = flightAdapter.getSelectors();
+export const flightStateSelector = s => s.flights;
+export const flightsSelector = createSelector(flightStateSelector, defaultFlightSelectors.selectAll);
+
+export function FlightReducer(state: FlightState, action: FlightActions): FlightState {
   switch(action.type) {
     case FLIGHTS_LOADED_ACTION:
-      return handleFlightsLoaded(state, action as FlightsLoadedAction);
-/*
-    case FLIGHTS_LOADED_ACTION:
-      break;
-    case FLIGHTS_LOAD_ERROR_ACTION:
-      break;
-*/
+      return flightAdapter.addAll(action.flights, state);
     case FLIGHT_CHANGED_ACTION:
-      return handleFlightChanged(state, action as FlightChangedAction);
+      return flightAdapter.updateOne({id: action.id, changes: action.flight}, state);
     default:
       return state;
   }
-}
-
-function handleFlightsLoaded(state: FlightState, action: FlightsLoadedAction): FlightState {
-
-  // state.flights
-  // action.flights
-  return {
-    statistics: calcStatistics(action.flights),
-    flights: action.flights
-  }
-
-}
-
-function calcStatistics(flights: Flight[]): FlightStatistics {
-  return {
-    countDelayed: flights.filter(f => f.delayed).length,
-    countInTime: flights.filter(f => !f.delayed).length
-  }
-}
-
-function handleFlightChanged(state: FlightState, action: FlightChangedAction): FlightState {
-
-  let flight = action.flight;
-  let idx = state.flights.findIndex(f => f.id == flight.id);
-
-  let newFlights = [
-    ...state.flights.slice(0, idx-1),
-    flight,
-    ...state.flights.slice(idx+1)
-  ];
-
-  return {
-    flights: newFlights,
-    statistics: calcStatistics(newFlights)
-  }
-
 }

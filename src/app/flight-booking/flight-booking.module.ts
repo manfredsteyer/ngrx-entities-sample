@@ -11,8 +11,7 @@ import { FLIGHT_BOOKING_ROUTES } from './flight-booking.routes';
 import { FlightEditComponent } from './flight-edit/flight-edit.component';
 import { FlightEffects } from './model/flight.effects';
 import { StoreModule } from '@ngrx/store';
-import { FlightReducer } from './model/flight.reducer';
-import { initFlightState } from './model/flight.state';
+import { FlightReducer, flightAdapter } from './model/flight.reducer';
 import { EffectsModule } from '@ngrx/effects';
 
 @NgModule({
@@ -21,7 +20,7 @@ import { EffectsModule } from '@ngrx/effects';
     FormsModule,
     SharedModule,
     RouterModule.forChild(FLIGHT_BOOKING_ROUTES),
-    StoreModule.forFeature('flights', FlightReducer, { initialState: initFlightState } ),
+    StoreModule.forFeature('flights', FlightReducer, { initialState: flightAdapter.getInitialState() } ),
     EffectsModule.forFeature([FlightEffects])
   ],
   declarations: [
@@ -39,3 +38,4 @@ import { EffectsModule } from '@ngrx/effects';
   ]
 })
 export class FlightBookingModule { }
+

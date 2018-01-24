@@ -1,5 +1,9 @@
 import { Flight } from '../../entities/flight';
+import { EntityState } from '@ngrx/entity';
 
+export interface FlightState extends EntityState<Flight> { }
+
+/*
 export interface FlightState {
   flights: Flight[];
   statistics: FlightStatistics;
@@ -18,3 +22,4 @@ export let initFlightState: FlightState = {
     countInTime: 0
   }
 }
+*/

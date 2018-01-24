@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { Flight } from '../../entities/flight';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
-import { FlightStatistics } from '../model/flight.state';
 import { AppState } from '../../model/app.state';
 import { Store } from '@ngrx/store';
 import { FlightChangedAction, FlightsLoadAction } from '../model/flight.actions';
+import { flightAdapter, flightsSelector } from '../model/flight.reducer';
 @Component({
   selector: 'flight-search',
   templateUrl: './flight-search.component.html',
@@ -19,7 +19,6 @@ export class FlightSearchComponent implements OnInit {
   //flights: Array<Flight> = [];
 
   flights$: Observable<Flight[]>;
-  statistics$: Observable<FlightStatistics>;
 
   selectedFlight: Flight;
 
@@ -36,8 +35,7 @@ export class FlightSearchComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.flights$ = this.store.select(s => s.flights.flights);
-    this.statistics$ = this.store.select(s => s.flights.statistics);
+    this.flights$ = this.store.select(flightsSelector);
   }
 
   search(): void {
@@ -76,7 +74,8 @@ export class FlightSearchComponent implements OnInit {
   }
 
   flightChange(f: Flight): void {
-    this.store.dispatch(new FlightChangedAction(f));
+
+    this.store.dispatch(new FlightChangedAction(f.id, f));
   }
 }
 
