@@ -6,6 +6,7 @@ import { AppState } from '../../model/app.state';
 import { Store } from '@ngrx/store';
 import { FlightChangedAction, FlightsLoadAction } from '../model/flight.actions';
 import { flightAdapter, flightsSelector } from '../model/flight.reducer';
+import { FlightFacade } from '../model/flight.facade';
 @Component({
   selector: 'flight-search',
   templateUrl: './flight-search.component.html',
@@ -30,43 +31,17 @@ export class FlightSearchComponent implements OnInit {
   // private http: HttpClient;
 
   constructor(
-    private store: Store<AppState>
+    private facade: FlightFacade
   ) {
   }
 
   ngOnInit() {
-    this.flights$ = this.store.select(flightsSelector);
+    this.flights$ = this.facade.flights$;
   }
 
   search(): void {
-
     if (!this.from || !this.to) return;
-
-    //this.flightService.load(this.from, this.to);
-    this.store.dispatch(new FlightsLoadAction(this.from, this.to));
-
-    /*
-    this.flights.push({
-      id: 4711,
-      from: 'Graz',
-      to: 'Kognito',
-      date: '2017-11-13T17:00'
-    });
-
-    this.flights.push({
-      id: 4712,
-      from: 'Graz',
-      to: 'Flagranti',
-      date: '2017-11-13T17:30'
-    });
-
-    this.flights.push({
-      id: 4713,
-      from: 'Graz',
-      to: 'Hamburg',
-      date: '2017-11-13T18:00'
-    });
-    */
+    this.facade.load(this.from, this.to);
   }
 
   select(f: Flight): void {
@@ -74,8 +49,7 @@ export class FlightSearchComponent implements OnInit {
   }
 
   flightChange(f: Flight): void {
-
-    this.store.dispatch(new FlightChangedAction(f.id, f));
+    this.facade.update(f);
   }
 }
 

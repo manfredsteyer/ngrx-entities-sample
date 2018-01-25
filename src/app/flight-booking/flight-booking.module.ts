@@ -13,6 +13,7 @@ import { FlightEffects } from './model/flight.effects';
 import { StoreModule } from '@ngrx/store';
 import { FlightReducer, flightAdapter } from './model/flight.reducer';
 import { EffectsModule } from '@ngrx/effects';
+import { FlightFacade } from './model/flight.facade';
 
 @NgModule({
   imports: [
@@ -31,11 +32,11 @@ import { EffectsModule } from '@ngrx/effects';
   ],
   providers: [
     FlightService,
-    FlightEffects
+    FlightEffects,
+    FlightFacade
   ],
   exports: [
     FlightSearchComponent
   ]
 })
 export class FlightBookingModule { }
-
