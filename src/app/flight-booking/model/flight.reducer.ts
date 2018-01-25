@@ -10,6 +10,7 @@ import { createSelector } from '@ngrx/store';
 export const flightAdapter = createEntityAdapter<Flight>();
 
 export const defaultFlightSelectors = flightAdapter.getSelectors();
+
 export const flightStateSelector = s => s.flights;
 export const flightsSelector = createSelector(flightStateSelector, defaultFlightSelectors.selectAll);
 

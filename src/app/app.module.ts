@@ -22,7 +22,10 @@ import { FlightEffects } from './flight-booking/model/flight.effects';
 import { EffectsModule } from "@ngrx/effects";
 
 import { storeFreeze } from 'ngrx-store-freeze';
+import { environment } from '../environments/environment';
 
+
+// let meta = environment.production ? [] : [storeFreeze];
 
 @NgModule({
   imports: [
@@ -32,7 +35,7 @@ import { storeFreeze } from 'ngrx-store-freeze';
     StoreModule.forRoot({}, { metaReducers: [storeFreeze]} ),
     EffectsModule.forRoot([]),
     StoreDevtoolsModule.instrument(),
-    FlightBookingModule
+    FlightBookingModule // forFeature
   ],
   declarations: [
     AppComponent,

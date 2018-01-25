@@ -48,6 +48,7 @@ export class FlightCardComponent implements OnInit, OnChanges, OnDestroy {
 
   toggleDelay() {
     this.item = {...this.item, delayed: !this.item.delayed};
+    // this.item.delayed = !this.item.delayed;
     this.itemChange.next(this.item);
   }
 
